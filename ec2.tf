@@ -24,3 +24,15 @@ resource "aws_iam_instance_profile" "main" {
   name = "ec2-instance-profile"
   role = aws_iam_role.main.name
 }
+
+resource "aws_instance" "main" {
+  ami                  = data.aws_ami.amazon_linux.id
+  instance_type        = "t2.micro"
+  iam_instance_profile = aws_iam_instance_profile.main.name
+  key_name             = var.instance_key_name
+  subnet_id            = aws_subnet.public_a.id
+
+  vpc_security_group_ids = [
+    aws_security_group.main.id
+  ]
+}
