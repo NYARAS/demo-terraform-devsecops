@@ -9,10 +9,8 @@ data "aws_ami" "amazon_linux" {
 }
 
 resource "aws_iam_role" "main" {
-  name               = "${local.prefix}-main"
+  name               = "main"
   assume_role_policy = file("./templates/instance-profile-policy.json")
-
-  tags = local.common_tags
 }
 
 resource "aws_iam_role_policy_attachment" "main_attach_policy" {
@@ -30,7 +28,7 @@ resource "aws_instance" "main" {
   instance_type        = "t2.micro"
   iam_instance_profile = aws_iam_instance_profile.main.name
   key_name             = var.instance_key_name
-  subnet_id            = aws_subnet.public_a.id
+  subnet_id            = aws_subnet.public.id
 
   vpc_security_group_ids = [
     aws_security_group.main.id
